@@ -1,0 +1,57 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+	<form id="add-form" class="grid gap-4">
+		<div class="grid">
+			<label for="title">Link Title</label>
+			<input required type="text" id="title" name="title" />
+		</div>
+		<div class="grid">
+			<label for="description">Link Description (160ch max)</label>
+			<textarea required name="description" maxlength="160" id="description"
+			></textarea>
+		</div>
+		<div class="grid">
+			<label for="url">Link URL</label>
+			<input required type="text" id="title" name="title" />
+		</div>
+		<flex class="gap-6 flex file:flex-wrap">
+			<div class="grid max-w-fit">
+				<label for="rating">Rating(1-5)</label>
+				<input max="5" min="1" type="number" id="rating" name="rating" />
+			</div>
+			<div class="grid max-w-fit">
+				<label for="isRead">Is Read</label>
+				<input type="checkbox" id="isRead" name="isRead" />
+			</div>
+		</flex>
+		<button class="bg-blue-500 text-blue-50 px-2 py-2 max-w-fit"
+			>Add Link</button
+		>
+	</form>
+</BaseLayout>
+
+<script>
+	const addForm = document.querySelector("#add-form") as HTMLFormElement;
+
+	addForm.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		const formData = new FormData(addForm);
+        const values = Object.fromEntries(formData);
+		//todo; sanitiza these inputs
+
+		try {
+			const res = fetch("/api/addLink.json", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	});
+</script>
